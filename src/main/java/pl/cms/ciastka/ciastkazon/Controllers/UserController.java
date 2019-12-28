@@ -18,10 +18,7 @@ import pl.cms.ciastka.ciastkazon.Services.interfaces.UserRepository;
 import pl.cms.ciastka.ciastkazon.domain.ApplicationUser;
 import pl.cms.ciastka.ciastkazon.domain.Role;
 import pl.cms.ciastka.ciastkazon.domain.RoleName;
-import pl.cms.ciastka.ciastkazon.payload.ApiResponse;
-import pl.cms.ciastka.ciastkazon.payload.JWTAuthenticationResponse;
-import pl.cms.ciastka.ciastkazon.payload.LoginRequest;
-import pl.cms.ciastka.ciastkazon.payload.SignUpRequest;
+import pl.cms.ciastka.ciastkazon.payload.*;
 import pl.cms.ciastka.ciastkazon.security.JWTTokenProvider;
 
 import javax.validation.Valid;
@@ -99,9 +96,24 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<ApplicationUser> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @PostMapping("/users/addUserRole")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> addUserRole(@Valid @RequestBody AddRoleRequest addRoleRequest) {
+        ApplicationUser applicationUser = userRepository.findByUsername(addRoleRequest.getRole());
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new AppException("User Role not set."));
+        applicationUser.addRole(userRole);
+        ApplicationUser result = userRepository.save(applicationUser);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath().path("/api/users/addUserRole/{username}")
+                .buildAndExpand(result.getUsername()).toUri();
+        return ResponseEntity.created(location).body(new ApiResponse(true, "User role added"));
+
     }
 //
 //    @Secured({"ROLE_USER", "ROLE_ADMIN"})

@@ -98,5 +98,9 @@ public class ApplicationUser extends DateAudit {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public void addRole(Role userRole) {
+        this.roles.add(userRole);
+    }
 }
 
