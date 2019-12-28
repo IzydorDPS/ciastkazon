@@ -1,14 +1,12 @@
 package pl.cms.ciastka.ciastkazon.Services;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.cms.ciastka.ciastkazon.Services.interfaces.UserRepository;
 import pl.cms.ciastka.ciastkazon.domain.ApplicationUser;
-
-import static java.util.Collections.emptyList;
+import pl.cms.ciastka.ciastkazon.security.UserPrincipal;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -24,6 +22,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (applicationUser == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(applicationUser.getUsername(), applicationUser.getPassword(), emptyList());
+        return UserPrincipal.create(applicationUser);
     }
+
+    public UserDetails loadUserById(Long id) {
+        ApplicationUser applicationUser = applicationUserRepository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("User not found with id : " + id)
+        );
+
+        return UserPrincipal.create(applicationUser);
+
+    }
+
 }
