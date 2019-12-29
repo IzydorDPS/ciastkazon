@@ -101,7 +101,7 @@ public class UserController {
     @PostMapping("/users/addUserRole")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addUserRole(@Valid @RequestBody AddRoleRequest addRoleRequest) {
-        ApplicationUser applicationUser = userRepository.findByUsername(addRoleRequest.getRole());
+        ApplicationUser applicationUser = userRepository.findByUsername(addRoleRequest.getEmail());
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
         applicationUser.addRole(userRole);
