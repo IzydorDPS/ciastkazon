@@ -37,6 +37,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTAuthenticationEntryPoint unauthorizedHandler;
 
+    private static final String[] AUTH_WHITELIST = {
+
+            // -- swagger ui
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -63,6 +71,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         "/**/*.js")
                 .permitAll()
                 .antMatchers("/api/auth/**")
+                .permitAll()
+                .antMatchers(AUTH_WHITELIST)
                 .permitAll()
                 .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()
