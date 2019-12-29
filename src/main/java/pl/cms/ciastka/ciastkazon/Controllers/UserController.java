@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,8 +28,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    private UserRepository applicationUserRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -115,10 +112,5 @@ public class UserController {
         return ResponseEntity.created(location).body(new ApiResponse(true, "User role added"));
 
     }
-//
-//    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-//    public ApplicationUser getUser(Long id) {}
-//
-//    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
-//    public boolean isUsernameAvailable() {}
+
 }
