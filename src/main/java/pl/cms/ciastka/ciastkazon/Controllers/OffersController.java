@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import pl.cms.ciastka.ciastkazon.Services.CategoryService;
 import pl.cms.ciastka.ciastkazon.Services.OffersService;
 import pl.cms.ciastka.ciastkazon.domain.Category;
@@ -44,8 +43,8 @@ public class OffersController {
     public Page<Category> getAllCategories(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, UriComponentsBuilder uriBuilder, HttpServletResponse response) {
 
     	if (page == null) {
-    		page = 1;
-    	}
+            page = 0;
+        }
     	
     	if (size == null) {
     		size = 10;
